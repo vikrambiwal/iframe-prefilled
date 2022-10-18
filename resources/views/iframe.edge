@@ -17,16 +17,7 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>
-      $('#post').click(function(){
-        $('#myform').attr('method', 'post');
-        $('#myform').submit()
-      });
-      $('#get').click(function(){
-        $('#myform').attr('method', 'get');
-        $('#myform').submit()
-      });
-    </script>
+  
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">iframe</a>
@@ -39,7 +30,7 @@
     </nav>
 
     <div class="container mt-5">
-      <form id="myform" action="open_iframe">
+      <form id="myform" action="#" target="_blank">
         <div class="form-group">
           <label for="exampleInputEmail1">URL</label>
           <input type="text" class="form-control" id="url" aria-describedby="emailHelp" placeholder="URL">
@@ -48,9 +39,56 @@
           <label for="exampleInputPassword1">JSON Payload</label>
           <textarea class="form-control" rows="15" id="payload" placeholder="JSON Payload"></textarea>
         </div>
-        <button type="" id="post" class="btn btn-primary">POST</button>
-        <button type="" id="get" class="btn btn-primary">GET</button>
+        <button type="button" id="post" class="btn btn-primary">POST</button>
+        <button type="button" id="get" class="btn btn-primary">GET</button>
       </form>
     </div>
   </body>
+    <script>
+      $('#post').click(function(){
+        // var url = 'http://iframe-development.dashboard-development.localhost:3000/whitelabel/orangedeli/ecrm?slug=orangedeli'
+        var url = $('#url').val()
+        try {
+          var data = $('#payload').val() ? JSON.parse($('#payload').val()) : {}
+          $('#myform').attr('method', 'post');
+          $('#myform').attr("action", url)
+          Object.keys(data).forEach(i=>{
+            $('#myform').append('<input type="hidden" name="'+i+'" value="'+data[i]+'" />');
+          })
+          // console.log('xxx', i);
+          $('#myform').submit()
+        } catch (error) {
+          alert('Invalid jSON!!')
+        }
+      });
+      $('#get').click(function(){
+        var url = $('#url').val()
+        try {
+          var data = $('#payload').val() ? JSON.parse($('#payload').val()) : {}
+          $('#myform').attr('method', 'get');
+          $('#myform').attr("action", url)
+          Object.keys(data).forEach(i=>{
+            $('#myform').append('<input type="hidden" name="'+i+'" value="'+data[i]+'" />');
+          })
+          $('#myform').submit()
+        } catch (error) {
+          alert('Invalid jSON!!')
+        }
+      });
+
+      $( document ).ready(function() {
+        var payload = {
+                        "first_name": "vikram",
+                        "last_name": "user",
+                        "email": "vikram@punchh.com",
+                        "phone": "964160837",
+                        "city": "jaipur",
+                        "zip_code": "300004"
+                      }
+        $("#payload").val(JSON.stringify(payload, null, 2));
+        $("#url").val('http://iframe-development.dashboard-development.localhost:3000/whitelabel/orangedeli/ecrm?slug=orangedeli');
+        console.log( "ready!" );
+      });
+
+    </script>
 </html>
